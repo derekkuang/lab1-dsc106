@@ -4,9 +4,6 @@ html {
 }
 
 body {
-    /* Set line height to 1.5 times the font size
-         and use the OS’s UI font as the website font
-       */
     font: 100%/1.5 system-ui;
     max-width: 100ch;
     margin-inline: auto;
@@ -32,34 +29,29 @@ nav a{
   padding: 0.5em;
 }
 
-/* Add a border to the bottom of the current link */
 nav a.current {
-  border-bottom: 0.4em solid oklch(80% 3% 200); /* or a lighter variant if you prefer */
-  /*  padding-bottom: 0.1em; /* adjust as needed */
+  border-bottom: 0.4em solid oklch(80% 3% 200);
 }
 
 nav a:hover {
   border-bottom: 0.4em solid var(--color-accent);
-  /* Optionally, also change the background to a light variant of the accent color */
   background-color: oklch(from var(--color-accent) 95% 5% h);
 }
 
 form {
   display: grid;
-  grid-template-columns: auto 1fr;  /* Two columns: auto for label text, 1fr for the control */
-  gap: 1em;                        /* Adds space between the grid items */
-  align-items: center;             /* Vertically centers grid items */
+  grid-template-columns: auto 1fr;
+  gap: 1em;                       
+  align-items: center;            
 }
 
-/* Make each label a grid that uses subgrid for its children */
 form label {
   display: grid;
-  grid-template-columns: subgrid;  /* Inherit the grid-template-columns from the parent form */
-  grid-column: 1 / -1;             /* Force the entire label (both text and control) to span all columns */
-  gap: 0.5em;                     /* Optional: space between the label text and the input field */
+  grid-template-columns: subgrid;  
+  grid-column: 1 / -1;       
+  gap: 0.5em;                   
 }
 
-/* Tell the input and textarea to appear in the second column of the label’s inner grid */
 form label input,
 form label textarea {
   grid-column: 2;
@@ -67,7 +59,6 @@ form label textarea {
   box-sizing: border-box;
 }
 
-/* For the submit button, have it span the entire width of the form */
 form button {
   grid-column: 1 / -1;
   padding: 0.5em;
@@ -76,33 +67,27 @@ form button {
 .projects {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
-  gap: 1em; /* Optional: adds spacing between grid items */
+  gap: 1em; 
 }
 
 .projects article {
   display: grid;
-  grid-template-rows: subgrid; /* Inherit the row definitions from the parent grid */
-  grid-row: span 3;           /* Each article spans three rows of the parent's grid */
-  gap: 1em;                   /* Adds spacing between the internal elements of each article */
-  /* Optionally, if you want no default margin on the article itself */
+  grid-template-rows: subgrid; 
+  grid-row: span 3;       
+  gap: 1em;                  
   margin: 0;
 }
 
-/* Remove extra margin from headings within articles */
 .projects article h2 {
   margin: 0;
 }
 
-/* Finishing touches for headings */
-
-/* Make the h1 significantly larger than body text */
 h1 {
-  font-size: 400%;         /* 400% of the body text size, adjust if needed */
-  line-height: 1.1;         /* Tighter leading for headings */
-  text-wrap: balance;       /* Attempts to balance text wrapping (experimental) */
+  font-size: 400%;         
+  line-height: 1.1;         
+  text-wrap: balance;       
 }
 
-/* Apply good defaults for all other heading tags */
 h2, h3, h4, h5, h6 {
   line-height: 1.1;
   text-wrap: balance;
@@ -116,7 +101,7 @@ header {
   border-bottom: 1px solid #ccc;
 }
 header h1 {
-  font-size: 300%;    /* Slightly smaller than the main page title */
+  font-size: 300%;    
   margin: 0.5em 0;
 }
 header article {
@@ -125,7 +110,6 @@ header article {
   margin: 1em 0;
 }
 
-/* Style resume sections (Education, Experience, Projects, Skills) */
 section {
   margin: 2em 0;
   padding-bottom: 1em;
@@ -137,7 +121,6 @@ section h2 {
   text-align: left;
 }
 
-/* Remove default list styles and add spacing for clarity */
 section ul {
   list-style-type: none;
   padding-left: 0;
@@ -146,7 +129,6 @@ section ul li {
   margin-bottom: 0.5em;
 }
 
-/* Optional: for the skills section, style list items as inline-blocks */
 section.skills ul li {
   display: inline-block;
   background: #f0f0f0;
