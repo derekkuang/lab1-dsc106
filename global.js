@@ -7,14 +7,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const BASE_PATH = 
     ["localhost", "127.0.0.1"].includes(location.hostname)
       ? "/"
-      : "/portfolio-106/";  // ← change to your repo name
+      : "/profolio-dsc106/";
 
   // 2) Your site pages (always point to actual files)
   const pages = [
-    { url: "index.html",          title: "Home"           },
-    { url: "projects/index.html", title: "Projects"       },
-    { url: "contact/index.html",  title: "Contact"        },
-    { url: "resume/index.html",   title: "Resume"         },
+    { url: "",          title: "Home"           },
+    { url: "projects/", title: "Projects"       },
+    { url: "contact/",  title: "Contact"        },
+    { url: "resume/",   title: "Resume"         },
     { url: "https://github.com/derekkuang", title: "GitHub" }
   ];
 
