@@ -1,51 +1,46 @@
-// global.js
+console.log("IT’S ALIVE!");
 
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("IT’S ALIVE!");
+const BASE_PATH =
+  location.hostname === "localhost" || location.hostname === "127.0.0.1"
+    ? "/" // Local server
+    : "/profolio-dsc106/"; // GitHub Pages repo name
 
-  // 1) Detect whether we’re local or on GitHub Pages
-  const BASE_PATH = 
-    ["localhost", "127.0.0.1"].includes(location.hostname)
-      ? "/"
-      : "/profolio-dsc106/";
+function $$(selector, context = document) {
+  return Array.from(context.querySelectorAll(selector));
+}
 
-  // 2) Your site pages (always point to actual files)
-  const pages = [
-    { url: "",          title: "Home"           },
-    { url: "projects/", title: "Projects"       },
-    { url: "contact/",  title: "Contact"        },
-    { url: "resume/",   title: "Resume"         },
-    { url: "https://github.com/derekkuang", title: "GitHub" }
-  ];
+const pages = [
+  { url: "", title: "Home" },
+  { url: "contact/index.html", title: "Contact" },
+  { url: "projects/", title: "Projects" },
+  { url: "resume/", title: "Resume" },
+  { url: "https://github.com/derekkuang", title: "Github Profile" },
+];
 
-  // 3) Build the <nav>
-  const nav = document.createElement("nav");
+let nav = document.createElement("nav");
+document.body.prepend(nav);
 
-  pages.forEach(({ url, title }) => {
-    // 3a) Compute href
-    const href = url.startsWith("http") 
-      ? url 
-      : BASE_PATH + url;
+for (let p of pages) {
+  let url = p.url;
+  let title = p.title;
 
-    // 3b) Create link
-    const a = document.createElement("a");
-    a.href = href;
-    a.textContent = title;
+  url = !url.startsWith("http") ? BASE_PATH + url : url;
 
-    // 3c) Highlight current page (only for internal links)
-    if (!url.startsWith("http") && new URL(href, location.origin).pathname === location.pathname) {
-      a.classList.add("current");
-    }
+  let a = document.createElement("a");
+  a.href = url;
+  a.textContent = title;
 
-    // 3d) External links open in new tab
-    if (url.startsWith("http")) {
-      a.target = "_blank";
-      a.rel    = "noopener noreferrer";
-    }
+  a.classList.toggle(
+    "current",
+    a.host === location.host && a.pathname === location.pathname
+  );
 
-    nav.appendChild(a);
-  });
+  if (a.host !== location.host) {
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+  }
 
-  // 4) Insert nav at the top of the body
-  document.body.insertBefore(nav, document.body.firstChild);
-});
+  nav.append(a);
+}
+
+const navLinks = $$("nav a");
