@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { url: "projects/index.html", title: "Projects"       },
     { url: "contact/index.html",  title: "Contact"        },
     { url: "resume/index.html",   title: "Resume"         },
-    { url: "https://github.com/chewycrunch", title: "GitHub" }
+    { url: "https://github.com/derekkuang", title: "GitHub" }
   ];
 
   // 3) Build the <nav>
