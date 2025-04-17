@@ -1,13 +1,34 @@
 console.log("IT’S ALIVE!");
 
+
+// color switch
+document.body.insertAdjacentHTML(
+  'afterbegin',
+  `
+	<label class="color-scheme">
+		Theme:
+		<select>
+			<option value="light dark">Automatic</option>
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+		</select>
+	</label>`,
+);
+
+
 function $$(selector, context = document) {
   return Array.from(context.querySelectorAll(selector));
 }
 
+// saving user preference
+
+
+// Base path
 const BASE_PATH = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
   ? "/profolio/"                  // Local server
   : "/profolio-dsc106/";         // GitHub Pages repo name
 
+// Nav Bar 
 let pages = [
   { url: "", title: "Home" },
   { url: "contact/", title: "Contact" },
@@ -42,4 +63,26 @@ for (let p of pages) {
 
 }
 
+const select = document.querySelector('.color-scheme select');
+
+select.addEventListener('input', function (event) {
+  console.log('color scheme changed to', event.target.value);
+  document.documentElement.style.setProperty('color-scheme', event.target.value);
+  localStorage.colorScheme = event.target.value
+});
+
+const saved = localStorage.colorScheme;
+if (saved) {
+  document.documentElement.style.setProperty('color-scheme', localStorage.colorScheme);
+  select.value = localStorage.colorScheme;
+} else {
+  document.documentElement.style.setProperty('color-scheme', select.value);
+}
+
+select.addEventListener('input', (e) => {
+  const scheme = e.target.value;
+  document.documentElement.style.setProperty('color-scheme', scheme);
+  localStorage.colorScheme = scheme;
+  console.log('Saved color scheme:', scheme);
+});
 
