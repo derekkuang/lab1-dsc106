@@ -153,3 +153,23 @@ section.skills ul li {
 .color-scheme select {
   font: inherit;
 }
+
+/* Profile stats definition list layout */
+#profile-stats dl {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 1rem;    /* adjust spacing as you like */
+  row-gap: 0.5rem;
+}
+
+#profile-stats dt {
+  grid-row: 1;         /* all terms on the first row */
+  font-weight: bold;
+  text-align: center;  /* optional: center the labels */
+}
+
+#profile-stats dd {
+  grid-row: 2;         /* all definitions on the second row */
+  margin: 0;           /* remove default dd indent */
+  text-align: center;  /* optional: center the values */
+}
