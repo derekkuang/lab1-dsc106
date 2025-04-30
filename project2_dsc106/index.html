@@ -136,6 +136,19 @@
           }
         }
       }
+
+      figure img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      figure > figcaption, p, li {
+        word-break: break-word;
+        overflow-wrap: anywhere;
+      }
     </style>
   </head>
 
@@ -146,26 +159,28 @@
         Persuasive or Deceptive Visualization?
       </h1>
 
-      <p><strong>Your Name</strong> — <em>Your UCSD Email Address</em></p>
+      <p><strong>Derek Kuang</strong> — <em>zakuang@ucsd.edu</em></p>
     </header>
 
     <main>
-      <h2>Proposition: [STATE PROPOSITION]</h2>
+      <h2>Proposition: Clinic Access Correlates with Abortion-Rate Changes (2017–2020)</h2>
 
       <section>
         <h3>FOR the Proposition</h3>
 
         <figure>
-          <img src="IMAGE_FILENAME" alt="">
-          <figcaption>BRIEF CAPTION HERE.</figcaption>
+          <img src="for_visualization.png" alt="">
+          <figcaption>Each point represents a state’s percentage change in clinic count (orange = loss, blue = gain, gray = no change) versus its percentage change in abortion rate from 2017 to 2020. The bold trend line (R² = 0.42) highlights a clear positive association: states losing clinics generally saw rate declines, and those gaining clinics saw rate increases.</figcaption>
         </figure>
 
         <p>Design Decisions and Rationale:</p>
 
         <ul>
-          <li>RATIONALE_1</li>
-          <li>RATIONALE_2</li>
-          <li>RATIONALE_3</li>
+          <li>Prominent Trend Line (Score -1): A thick regression line dominates the view, making the upward clinic→rate relationship immediately obvious</li>
+          <li>Diverging Color Ramp (Score –1): Orange for clinic losses and blue for gains exaggerates left/right clusters, with gray for no-change points to avoid drawing attention to the neutral zone.
+
+          </li>
+          <li>R² in Subtitle (Score +1): "R² = 0.42 ⇒ 42% explained" under the title lends faux-scientific heft, explicitly quantifying the strength of the clinic–rate association and reinforcing the relationship up front.</li>
         </ul>
       </section>
 
