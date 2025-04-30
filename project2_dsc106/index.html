@@ -195,11 +195,11 @@
         <p>Design Decisions and Rationale:</p>
 
         <ul>
-          <li>Minimal Size Variation (Score –1)
+          <li>Minimal Size Variation (Score –1):
             By compressing the size scale so all circles appear nearly the same, readers cannot discern whether larger rate‐change values align with larger clinic‐change values, effectively masking any size‐based pattern.</li>
-          <li>Narrow Diverging Color Domain (Score –1)
+          <li>Narrow Diverging Color Domain (Score –1):
             The orange–blue palette is mapped over a very tight clinic‐change window, pushing most points into neutral beige tones so color no longer signals meaningful differences or corresponds to circle size.</li>
-          <li>Muted Map Context (Score –1)
+          <li>Muted Map Context (Score –1):
             Keeping the basemap and state borders in light gray (and leaving gridlines on) blurs geographic groupings, preventing viewers from visually clustering Southern points or any regional pattern—reinforcing the “no relationship” narrative.</li>
         </ul>
       </section>
@@ -207,11 +207,17 @@
       <section>
         <h2>Final Reflection</h2>
 
-        <p>Working on the scatter plot felt intuitive: I already knew I wanted to highlight the relationship between clinic change and rate change, so adding a bold regression line and calling out the R² felt like natural steps. Tweaking the color ramp to make gains and losses pop was fun, though I had to balance vivid hues against washing out points near zero. Finding that sweet spot where the chart felt vibrant but not garish took a few tries, but once the visuals clicked, the story was clear.</p>
+        <p>I began this project with the Guttmacher Institute’s state‐level data on abortion rates and clinic counts from 2017 to 2020—a rich dataset showing how access to care and abortion incidence have shifted across all 50 states and D.C. My initial goal was simply to visualize that relationship as clearly and “objectively” as possible. For the Pro side, I leaned into standard best practices: a bold regression line, a diverging color ramp centered at zero, and an upfront R² annotation to signal statistical rigor. It felt honest and straightforward to highlight that states losing clinics tended to see rate declines, while those gaining clinics saw increases.
 
-        <p>Building the counter‐visual was a very different challenge. Instead of adding emphasis, I had to think about what to remove—dialing down bubble sizes and muting the color scale so viewers see no obvious pattern. It’s almost counterintuitive: you’re fighting against your design instincts to create a convincing “nothing to see here” map. It taught me that subtlety can be just as powerful as bold highlights, but only if you know exactly which cues to soften.</p>
+        </p> 
+
+        <p>Switching to the Con side was unexpectedly challenging. Without altering a single underlying data point, I had to figure out how to mute size and color cues and strip away map context so that no pattern remained. Small shifts—compressing bubble sizes, constraining the color domain, hiding tooltips—completely flattened the story. I was surprised by how powerful these low‐key design tactics can be: you don’t need a glaring lie to persuade readers, just a thoughtful reduction of visual signals. That exercise drove home that every “neutral” chart element—legends, axes, map layers—is itself a choice with rhetorical weight.
+        
+        </p>
+        
+        <p>Through this back‐and‐forth, I’ve come to see “ethical visualization” not as an absolute of perfect objectivity but as a practice of transparency and balance. When data must be transformed—by filtering, binning, or scaling—those steps should be clearly annotated or split across multiple views so audiences can inspect each layer of the argument. The clearest boundary between acceptable persuasion and outright deception, I’ve found, is whether a reader could, if they wished, reconstruct the full story from the raw data. If yes, the visualization remains in good faith; if critical context has been hidden or obscured, it crosses into misleading territory. Ultimately, persuasion in data isn’t unethical on its own, but it demands an awareness of how easily design choices steer interpretation—and a commitment to disclose those choices whenever possible.
             
-        <p>What surprised me most was how even the tiniest design tweaks—a slight shift in size scaling or a touch of gray in the palette—could completely flip the narrative. It’s easy to assume charts are neutral, but this exercise showed me they’re not: every choice steers interpretation. To me, ethical visualization means making those decisions transparently. If a reader can look at the chart, read the captions, and trace back exactly how I shaped the story, I’ve stayed honest. Hide too much, and you veer into misleading territory—and that’s a line I now feel responsible never to cross.</p>
+        </p> 
       </section>
     </main>
   
