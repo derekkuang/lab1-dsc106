@@ -180,7 +180,7 @@
           <li>Diverging Color Ramp (Score –1): Orange for clinic losses and blue for gains exaggerates left/right clusters, with gray for no-change points to avoid drawing attention to the neutral zone.
 
           </li>
-          <li>R² in Subtitle (Score +1): "R² = 0.42 ⇒ 42% explained" under the title lends faux-scientific heft, explicitly quantifying the strength of the clinic–rate association and reinforcing the relationship up front.</li>
+          <li>R² in Subtitle (Score +1): "R² = 0.42 ⇒ 42% explained" under the title lends faux-scientific heft, explicitly quantifying the strength of the clinic–abortion association and reinforcing the relationship up front.</li>
         </ul>
       </section>
 
@@ -188,23 +188,30 @@
         <h3>AGAINST the Proposition</h3>
 
         <figure>
-          <img src="IMAGE_FILENAME" alt="">
+          <img src="against_visualization.png" alt="">
           <figcaption>BRIEF CAPTION HERE.</figcaption>
         </figure>
 
         <p>Design Decisions and Rationale:</p>
 
         <ul>
-          <li>RATIONALE_1</li>
-          <li>RATIONALE_2</li>
-          <li>RATIONALE_3</li>
+          <li>Minimal Size Variation (Score –1)
+            By compressing the size scale so all circles appear nearly the same, readers cannot discern whether larger rate‐change values align with larger clinic‐change values, effectively masking any size‐based pattern.</li>
+          <li>Narrow Diverging Color Domain (Score –1)
+            The orange–blue palette is mapped over a very tight clinic‐change window, pushing most points into neutral beige tones so color no longer signals meaningful differences or corresponds to circle size.</li>
+          <li>Muted Map Context (Score –1)
+            Keeping the basemap and state borders in light gray (and leaving gridlines on) blurs geographic groupings, preventing viewers from visually clustering Southern points or any regional pattern—reinforcing the “no relationship” narrative.</li>
         </ul>
       </section>
 
       <section>
         <h2>Final Reflection</h2>
 
-        <p>[WRITE FINAL REFLECTION PARAGRAPHS HERE.]</p>
+        <p>Working on the scatter plot felt intuitive: I already knew I wanted to highlight the relationship between clinic change and rate change, so adding a bold regression line and calling out the R² felt like natural steps. Tweaking the color ramp to make gains and losses pop was fun, though I had to balance vivid hues against washing out points near zero. Finding that sweet spot where the chart felt vibrant but not garish took a few tries, but once the visuals clicked, the story was clear.</p>
+
+        <p>Building the counter‐visual was a very different challenge. Instead of adding emphasis, I had to think about what to remove—dialing down bubble sizes and muting the color scale so viewers see no obvious pattern. It’s almost counterintuitive: you’re fighting against your design instincts to create a convincing “nothing to see here” map. It taught me that subtlety can be just as powerful as bold highlights, but only if you know exactly which cues to soften.</p>
+            
+        <p>What surprised me most was how even the tiniest design tweaks—a slight shift in size scaling or a touch of gray in the palette—could completely flip the narrative. It’s easy to assume charts are neutral, but this exercise showed me they’re not: every choice steers interpretation. To me, ethical visualization means making those decisions transparently. If a reader can look at the chart, read the captions, and trace back exactly how I shaped the story, I’ve stayed honest. Hide too much, and you veer into misleading territory—and that’s a line I now feel responsible never to cross.</p>
       </section>
     </main>
   
