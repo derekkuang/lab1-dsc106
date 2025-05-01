@@ -173,3 +173,116 @@ section.skills ul li {
   margin: 0;           /* remove default dd indent */
   text-align: center;  /* optional: center the values */
 }
+
+body > img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.project-desc-year {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.project-year {
+  color: #888;
+  font-family: Baskerville, serif;
+  font-variant-numeric: oldstyle-nums;
+  font-size: 1em;
+  margin-top: 0.2em;
+}
+
+#projects-pie-plot {
+  max-width: 20em;
+  margin-block: 2em;
+
+  overflow: visible;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 2em;
+  margin-bottom: 2em;
+}
+
+.container .legend {
+  flex: 1;
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));
+  gap: 1em;
+  border: 1px solid #ccc;
+  border-radius: 0.5em;
+  padding: 1em;
+  margin: 1em 0;
+  background: #fafafa;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  min-width: 8em;
+  font-size: 1em;
+}
+
+.swatch {
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  background: var(--color);
+  border-radius: 0.3em;
+  border: 1px solid #bbb;
+  margin-right: 0.3em;
+  flex-shrink: 0;
+}
+
+.legend-item em {
+  color: #888;
+  font-style: normal;
+  margin-left: 0.2em;
+}
+
+.searchBar {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  font-size: 2rem;
+  padding: 0.75em 1em;
+  margin: 2em 0 2em 0;
+  border: 1.5px solid #bbb;
+  border-radius: 0.5em;
+  box-sizing: border-box;
+  background: #fafbfc;
+  font-family: inherit;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.searchBar:focus {
+  border-color: var(--color-accent, #888);
+  background: #fff;
+}
+
+svg#projects-pie-plot:has(path:hover) path:not(:hover) {
+  opacity: 0.5;
+}
+
+svg#projects-pie-plot path {
+  transition: opacity 300ms;
+}
+
+.selected {
+  --color: oklch(60% 45% 0) !important;
+}
+svg#projects-pie-plot path.selected {
+  fill: var(--color);
+}
+svg#projects-pie-plot path {
+  cursor: pointer;
+}

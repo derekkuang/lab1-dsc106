@@ -1,4 +1,4 @@
-console.log("IT’S ALIVE!");
+console.log("IT'S ALIVE!");
 
 
 // color switch
@@ -108,7 +108,10 @@ export function renderProjects(project, containerElement, headingLevel = 'h2') {
 	  article.innerHTML = `
 		<${headingLevel}>${proj.title}</${headingLevel}>
 		<img src="${proj.image}" alt="${proj.title}">
-		<p>${proj.description}</p>
+		<div class="project-desc-year">
+			<p>${proj.description}</p>
+			<div class="project-year">${proj.year}</div>
+		</div>
 	  `;
 	  containerElement.appendChild(article);
 	});
