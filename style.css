@@ -286,3 +286,173 @@ svg#projects-pie-plot path.selected {
 svg#projects-pie-plot path {
   cursor: pointer;
 }
+
+/* Stats styling for meta analysis page */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12em, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.stats dt {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #555;
+}
+
+.stats dd {
+  margin: 0;
+  font-size: 1.5em;
+  font-weight: 600;
+  color: var(--color-accent, #333);
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Chart styling */
+#chart {
+  margin: 2rem 0;
+}
+
+#chart svg {
+  width: 100%;
+  height: auto;
+  max-width: 1000px;
+}
+
+.dots circle {
+  opacity: 0.7;
+  transition: r 0.2s, opacity 0.2s;
+}
+
+.dots circle:hover {
+  opacity: 1;
+  r: 8;
+  cursor: pointer;
+}
+
+/* Gridlines styling */
+.gridlines line {
+  stroke: #e0e0e0;
+  stroke-width: 0.5;
+  shape-rendering: crispEdges;
+}
+
+.gridlines path {
+  stroke-width: 0;
+  display: none;
+}
+
+/* Tooltip styling */
+dl.info {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1rem;
+  margin: 0;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08);
+  max-width: 400px;
+  border: 1px solid rgba(200, 200, 200, 0.3);
+  backdrop-filter: blur(8px);
+  transition-duration: 500ms;
+  transition-property: opacity, visibility;
+}
+
+dl.info[hidden]:not(:hover, :focus-within) {
+  opacity: 0;
+  visibility: hidden;
+}
+
+dl.info dt {
+  font-weight: bold;
+  color: #555;
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+dl.info dd {
+  margin: 0;
+  padding: 0;
+}
+
+dl.info a {
+  color: var(--color-accent, #0066cc);
+  text-decoration: none;
+  font-family: monospace;
+  font-size: 0.95em;
+}
+
+dl.info a:hover {
+  text-decoration: underline;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 1;
+  transform: translate(10px, 10px);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.tooltip.hidden {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+}
+
+/* Circle hover effects */
+circle {
+  transition: 200ms;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+circle:hover {
+  transform: scale(1.5);
+}
+
+/* Brush selection styling */
+@keyframes marching-ants {
+  to {
+    stroke-dashoffset: -8; /* 5 + 3 */
+  }
+}
+
+.selection {
+  fill-opacity: 0.1;
+  stroke: black;
+  stroke-opacity: 0.7;
+  stroke-dasharray: 5 3;
+  animation: marching-ants 2s linear infinite;
+}
+
+/* Selected dots styling */
+circle.selected {
+  fill: #ff6b6b;
+  stroke: #ff3333;
+  stroke-width: 1.5px;
+}
+
+#selection-count {
+  font-size: 1.1em;
+  font-weight: 500;
+  margin: 1rem 0;
+  color: #333;
+  padding: 0.5rem 1rem;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  display: inline-block;
+}
