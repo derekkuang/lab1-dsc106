@@ -6,9 +6,10 @@
         "description": "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Necessitatibus laboriosam expedita corrupti! Sapiente, inventore. Corporis, expedita eaque ad natus illum, voluptate voluptas placeat exercitationem aperiam veritatis nostrum, dolor ipsum cum?"
     },
     {
-        "title": "Soluta debitis eveniet numquam.",
+        "title": "Bike Watching",
         "year": 2025,
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "image": "../images/bikewatching.png",
+        "url": "https://derekkuang.github.io/bikewatching/",
         "description": "Quidem saepe cumque sunt accusamus ipsa magni repellat deserunt minus tenetur quod dolor, excepturi quasi facilis veritatis! Consectetur animi deleniti blanditiis repellat corporis eaque molestias odio, nulla pariatur, nam illo?"
     },
     {

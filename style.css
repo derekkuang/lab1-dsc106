@@ -456,3 +456,12 @@ circle.selected {
   border-radius: 4px;
   display: inline-block;
 }
+
+/* Add this to your style.css file */
+.projects article img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  aspect-ratio: 16/9;  /* Maintain consistent aspect ratio */
+  border-radius: 4px;  /* Optional: adds rounded corners */
+}

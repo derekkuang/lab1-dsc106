@@ -105,10 +105,27 @@ export function renderProjects(project, containerElement, headingLevel = 'h2') {
 	containerElement.innerHTML = '';
   
 	project.forEach(proj => {
+	  // Fix image path based on current page location
+	  let imagePath = proj.image;
+	  
+	  // If we're on the home page and path starts with "../images/"
+	  if (!window.location.pathname.includes('/projects/') && 
+	      imagePath.startsWith('../images/')) {
+	    // Convert "../images/" to "./images/" for home page
+	    imagePath = imagePath.replace('../images/', './images/');
+	  }
+	  
 	  const article = document.createElement('article');
+	  
+	  // Create title element with optional link
+	  let titleHTML = `<${headingLevel}>${proj.title}</${headingLevel}>`;
+	  if (proj.url) {
+	    titleHTML = `<${headingLevel}><a href="${proj.url}" target="_blank">${proj.title}</a></${headingLevel}>`;
+	  }
+	  
 	  article.innerHTML = `
-		<${headingLevel}>${proj.title}</${headingLevel}>
-		<img src="${proj.image}" alt="${proj.title}">
+		${titleHTML}
+		<img src="${imagePath}" alt="${proj.title}">
 		<div class="project-desc-year">
 			<p>${proj.description}</p>
 			<div class="project-year">${proj.year}</div>
