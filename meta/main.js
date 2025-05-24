@@ -1,7 +1,15 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
+import scrollama from 'https://cdn.jsdelivr.net/npm/scrollama@3.2.0/+esm';
 
 // Define scales at global scope
 let xScale, yScale;
+
+// Commit progress slider value and time variables
+let commitProgress = 100;
+let timeScale, commitMaxTime;
+
+// Will get updated as user changes slider
+let filteredCommits;
 
 async function loadData() {
   const data = await d3.csv('loc.csv', (row) => ({
@@ -42,7 +50,8 @@ function processCommits(data) {
       });
 
       return ret;
-    });
+    })
+    .sort((a, b) => a.datetime - b.datetime);
 }
 
 function renderCommitInfo(data, commits) {
@@ -154,7 +163,7 @@ function updateTooltipPosition(event) {
 
 function renderSelectionCount(selection) {
   const selectedCommits = selection
-    ? commits.filter((d) => isCommitSelected(selection, d))
+    ? filteredCommits.filter((d) => isCommitSelected(selection, d))
     : [];
 
   const countElement = document.querySelector('#selection-count');
@@ -167,7 +176,7 @@ function renderSelectionCount(selection) {
 
 function renderLanguageBreakdown(selection) {
   const selectedCommits = selection
-    ? commits.filter((d) => isCommitSelected(selection, d))
+    ? filteredCommits.filter((d) => isCommitSelected(selection, d))
     : [];
   const container = document.getElementById('language-breakdown');
 
@@ -175,7 +184,7 @@ function renderLanguageBreakdown(selection) {
     container.innerHTML = '';
     return;
   }
-  const requiredCommits = selectedCommits.length ? selectedCommits : commits;
+  const requiredCommits = selectedCommits.length ? selectedCommits : filteredCommits;
   const lines = requiredCommits.flatMap((d) => d.lines);
 
   // Use d3.rollup to count lines per language
@@ -294,12 +303,14 @@ function renderScatterPlot(data, commits) {
   svg
     .append('g')
     .attr('transform', `translate(0, ${usableArea.bottom})`)
+    .attr('class', 'x-axis')
     .call(xAxis);
   
   // Add Y axis
   svg
     .append('g')
     .attr('transform', `translate(${usableArea.left}, 0)`)
+    .attr('class', 'y-axis')
     .call(yAxis);
   
   // Make sure tooltip is hidden initially
@@ -313,11 +324,12 @@ function renderScatterPlot(data, commits) {
   
   dots
     .selectAll('circle')
-    .data(sortedCommits)
+    .data(sortedCommits, (d) => d.id)
     .join('circle')
     .attr('cx', (d) => xScale(d.datetime))
     .attr('cy', (d) => yScale(d.hourFrac))
     .attr('r', (d) => rScale(d.totalLines))
+    .style('--r', (d) => rScale(d.totalLines))
     .attr('fill', 'steelblue')
     .style('fill-opacity', 0.7) // Add transparency for overlapping dots
     .on('mouseenter', (event, commit) => {
@@ -335,8 +347,315 @@ function renderScatterPlot(data, commits) {
   createBrushSelector(svg);
 }
 
+function updateScatterPlot(data, commits) {
+  const width = 1000;
+  const height = 600;
+  const margin = { top: 10, right: 10, bottom: 30, left: 20 };
+  const usableArea = {
+    top: margin.top,
+    right: width - margin.right,
+    bottom: height - margin.bottom,
+    left: margin.left,
+    width: width - margin.left - margin.right,
+    height: height - margin.top - margin.bottom,
+  };
+
+  const svg = d3.select('#chart').select('svg');
+
+  xScale = xScale.domain(d3.extent(commits, (d) => d.datetime));
+
+  const [minLines, maxLines] = d3.extent(commits, (d) => d.totalLines);
+  const rScale = d3.scaleSqrt().domain([minLines, maxLines]).range([2, 30]);
+
+  const xAxis = d3.axisBottom(xScale);
+
+  // Update the x-axis
+  const xAxisGroup = svg.select('g.x-axis');
+  xAxisGroup.selectAll('*').remove();
+  xAxisGroup.call(xAxis);
+
+  const dots = svg.select('g.dots');
+
+  const sortedCommits = d3.sort(commits, (d) => -d.totalLines);
+  dots
+    .selectAll('circle')
+    .data(sortedCommits, (d) => d.id)
+    .join('circle')
+    .attr('cx', (d) => xScale(d.datetime))
+    .attr('cy', (d) => yScale(d.hourFrac))
+    .attr('r', (d) => rScale(d.totalLines))
+    .style('--r', (d) => rScale(d.totalLines))
+    .attr('fill', 'steelblue')
+    .style('fill-opacity', 0.7) // Add transparency for overlapping dots
+    .on('mouseenter', (event, commit) => {
+      d3.select(event.currentTarget).style('fill-opacity', 1); // Full opacity on hover
+      renderTooltipContent(commit);
+      updateTooltipVisibility(true);
+      updateTooltipPosition(event);
+    })
+    .on('mouseleave', (event) => {
+      d3.select(event.currentTarget).style('fill-opacity', 0.7);
+      updateTooltipVisibility(false);
+    });
+}
+
+function updateCommitInfo(data, commits) {
+  // Get the existing stats container
+  const dl = d3.select('#stats dl.stats');
+  
+  // Get all dd elements
+  const ddElements = dl.selectAll('dd');
+  
+  // Get relevant stats for the filtered data
+  const filteredData = data.filter(d => 
+    commits.some(commit => commit.id === d.commit)
+  );
+  
+  // Update dd elements with new values
+  // Total LOC
+  ddElements.nodes()[0].textContent = filteredData.length;
+  
+  // Total commits
+  ddElements.nodes()[1].textContent = commits.length;
+  
+  // Number of files
+  const uniqueFiles = d3.group(filteredData, d => d.file);
+  ddElements.nodes()[2].textContent = uniqueFiles.size;
+  
+  // Number of authors
+  const uniqueAuthors = d3.group(filteredData, d => d.author);
+  ddElements.nodes()[3].textContent = uniqueAuthors.size;
+  
+  // Maximum file length
+  const fileLengths = d3.rollups(
+    filteredData,
+    group => group.length,
+    d => d.file
+  );
+  
+  const maxFileLength = d3.max(fileLengths, d => d[1]);
+  ddElements.nodes()[4].textContent = maxFileLength + ' lines';
+  
+  // Longest file
+  const longestFile = d3.greatest(fileLengths, (a, b) => a[1] - b[1]);
+  ddElements.nodes()[5].textContent = longestFile ? longestFile[0] : 'N/A';
+  
+  // Average file length
+  const avgFileLength = d3.mean(fileLengths, d => d[1]);
+  ddElements.nodes()[6].textContent = avgFileLength ? avgFileLength.toFixed(1) + ' lines' : 'N/A';
+  
+  // Average line length
+  const avgLineLength = d3.mean(filteredData, d => d.length);
+  ddElements.nodes()[7].textContent = avgLineLength ? avgLineLength.toFixed(1) + ' characters' : 'N/A';
+  
+  // Maximum depth and deepest file
+  const maxDepth = d3.max(filteredData, d => d.depth);
+  ddElements.nodes()[8].textContent = maxDepth || 'N/A';
+  
+  if (maxDepth) {
+    const deepestLine = filteredData.find(d => d.depth === maxDepth);
+    ddElements.nodes()[9].textContent = deepestLine ? deepestLine.file : 'N/A';
+  } else {
+    ddElements.nodes()[9].textContent = 'N/A';
+  }
+  
+  // Average depth
+  const avgDepth = d3.mean(filteredData, d => d.depth);
+  ddElements.nodes()[10].textContent = avgDepth ? avgDepth.toFixed(1) : 'N/A';
+  
+  // Peak coding time
+  const workByHour = d3.rollups(
+    filteredData,
+    group => group.length,
+    d => new Date(d.datetime).getHours()
+  );
+  
+  if (workByHour.length > 0) {
+    const peakHour = d3.greatest(workByHour, (a, b) => a[1] - b[1])[0];
+    const timeOfDay = peakHour < 12 ? 'Morning' :
+                     peakHour < 17 ? 'Afternoon' :
+                     peakHour < 21 ? 'Evening' : 'Night';
+    
+    ddElements.nodes()[11].textContent = `${timeOfDay} (${peakHour}:00)`;
+  } else {
+    ddElements.nodes()[11].textContent = 'N/A';
+  }
+}
+
+function updateFileDisplay(commits) {
+  // Get lines from all filtered commits
+  let lines = commits.flatMap((d) => d.lines);
+  
+  // Create a color scale for different technology types
+  let colors = d3.scaleOrdinal(d3.schemeTableau10);
+  
+  // Group lines by file name
+  let files = d3
+    .groups(lines, (d) => d.file)
+    .map(([name, lines]) => {
+      return { name, lines };
+    });
+  
+  // Sort files by number of lines (descending)
+  files.sort((a, b) => b.lines.length - a.lines.length);
+  
+  // Update the file list display
+  let filesContainer = d3
+    .select('#files')
+    .selectAll('div')
+    .data(files, (d) => d.name)
+    .join(
+      // This code only runs when the div is initially rendered
+      (enter) =>
+        enter.append('div').call((div) => {
+          div.append('dt').append('code');
+          div.append('dd');
+        }),
+    );
+
+  // This code updates the div info
+  filesContainer.select('dt > code').html((d) => `${d.name} <small>${d.lines.length} lines</small>`);
+  
+  // append one div for each line
+  filesContainer
+    .select('dd')
+    .selectAll('div')
+    .data((d) => d.lines)
+    .join('div')
+    .attr('class', 'loc')
+    .attr('style', (d) => `--color: ${colors(d.type)}`);
+}
+
 let data = await loadData();
 let commits = processCommits(data);
 
+// Initialize time scale for the slider
+timeScale = d3
+  .scaleTime()
+  .domain([
+    d3.min(commits, (d) => d.datetime),
+    d3.max(commits, (d) => d.datetime),
+  ])
+  .range([0, 100]);
+commitMaxTime = timeScale.invert(commitProgress);
+
+// Initialize filteredCommits with all commits
+filteredCommits = [...commits];
+
 renderCommitInfo(data, commits);
 renderScatterPlot(data, commits);
+updateFileDisplay(filteredCommits);
+
+// Time slider event handler
+function onTimeSliderChange() {
+  // Update the commitProgress variable with the slider value
+  commitProgress = document.getElementById('commit-progress').value;
+  
+  // Update the max time based on the slider value
+  commitMaxTime = timeScale.invert(commitProgress);
+  
+  // Update the time display with format "April 11, 2024 at 10:26 AM"
+  const date = commitMaxTime.toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
+  });
+  const time = commitMaxTime.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  });
+  document.getElementById('commit-time').textContent = `${date} at ${time}`;
+  
+  // Filter commits based on the selected time
+  filteredCommits = commits.filter((d) => d.datetime <= commitMaxTime);
+  
+  // Update the scatter plot with filtered commits
+  updateScatterPlot(data, filteredCommits);
+  
+  // Update the commit statistics
+  updateCommitInfo(data, filteredCommits);
+  
+  // Update the selection count display
+  document.querySelector('#selection-count').textContent = `${filteredCommits.length || 'No'} commits filtered`;
+  
+  // Update language breakdown with filtered commits
+  renderLanguageBreakdown(null);
+  
+  // Update file display with filtered commits
+  updateFileDisplay(filteredCommits);
+}
+
+// Attach event listener to the slider
+document.getElementById('commit-progress').addEventListener('input', onTimeSliderChange);
+
+// Initialize the time display and filtered commits
+onTimeSliderChange();
+
+// Generate commit text for scrollytelling
+d3.select('#scatter-story')
+  .selectAll('.step')
+  .data(commits)
+  .join('div')
+  .attr('class', 'step')
+  .html(
+    (d, i) => `
+		On ${d.datetime.toLocaleString('en', {
+      dateStyle: 'full',
+      timeStyle: 'short',
+    })},
+		I made <a href="${d.url}" target="_blank">${
+      i > 0 ? 'another glorious commit' : 'my first commit, and it was glorious'
+    }</a>.
+		I edited ${d.totalLines} lines across ${
+      d3.rollups(
+        d.lines,
+        (D) => D.length,
+        (d) => d.file,
+      ).length
+    } files.
+		Then I looked over all I had made, and I saw that it was very good.
+	`,
+  );
+
+// Scrollama setup for scrollytelling
+function onStepEnter(response) {
+  // Get the commit data attached to the step element
+  const currentCommit = response.element.__data__;
+  const currentDate = currentCommit.datetime;
+  
+  // Filter commits up to this date
+  filteredCommits = commits.filter((d) => d.datetime <= currentDate);
+  
+  // Update visualizations
+  updateScatterPlot(data, filteredCommits);
+  updateCommitInfo(data, filteredCommits);
+  document.querySelector('#selection-count').textContent = `${filteredCommits.length} commits shown`;
+  renderLanguageBreakdown(null);
+  updateFileDisplay(filteredCommits);
+  
+  // Update the slider position to match
+  const sliderValue = timeScale(currentDate);
+  document.getElementById('commit-progress').value = sliderValue;
+  
+  // Update the time display
+  const date = currentDate.toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
+  });
+  const time = currentDate.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  });
+  document.getElementById('commit-time').textContent = `${date} at ${time}`;
+}
+
+const scroller = scrollama();
+scroller
+  .setup({
+    container: '#scrolly-1',
+    step: '#scrolly-1 .step',
+  })
+  .onStepEnter(onStepEnter);
