@@ -42,6 +42,7 @@
           display: flex;
           gap: 1rem;
           margin: 2rem 0;
+          min-height: 100vh;
 
           > * {
             flex: 1;
@@ -55,10 +56,13 @@
 
         #files-visual {
           position: sticky;
-          top: 0;
+          top: 5rem;
           left: 0;
           bottom: auto;
           min-height: 60vh;
+          height: fit-content;
+          align-self: flex-start;
+          z-index: 1;
         }
         
         #files {
@@ -67,6 +71,8 @@
           margin-bottom: 20px;
           margin-top: 1rem;
           width: 100%;
+          max-height: 70vh;
+          overflow: visible;
 
           > div {
             grid-column: 1 / -1;
@@ -265,6 +271,8 @@
           </div>
         </div>
     </div>
+
+    <div style="margin-top: 50vh;"></div>
 
     <script type="module" src="../global.js"></script>
     <script type="module" src="main.js"></script>
