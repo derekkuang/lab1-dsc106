@@ -58,15 +58,15 @@
           top: 0;
           left: 0;
           bottom: auto;
-          height: 60vh;
-          overflow-y: auto;
+          min-height: 60vh;
         }
         
         #files {
           display: grid;
           grid-template-columns: 1fr 4fr;
           margin-bottom: 20px;
-          margin-top: 2rem;
+          margin-top: 1rem;
+          width: 100%;
 
           > div {
             grid-column: 1 / -1;
@@ -103,6 +103,11 @@
             background: var(--color, steelblue);
             border-radius: 50%;
           }
+        }
+        
+        #files-visual h2 {
+          margin-top: 0;
+          margin-bottom: 1rem;
         }
 
         .step {
@@ -177,36 +182,22 @@
           border-bottom-color: steelblue;
         }
 
+        /* Only override what's necessary for right-side alignment */
         #scrolly-2 .step {
-          margin-bottom: 5vh;
-          padding: 1rem 1.5rem;
-          background: rgba(255, 255, 255, 0.95);
           border-right: 4px solid steelblue;
           border-left: none;
-          line-height: 1.5;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
           border-radius: 4px 0 0 4px;
-          max-width: 90%;
           margin-left: auto;
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-          position: relative;
         }
         
         #scrolly-2 .step.is-active {
           transform: translateX(-8px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
           border-right-color: #2b506e;
-          background: rgba(255, 255, 255, 1);
         }
         
         #scrolly-2 .step.is-active:after {
-          content: "";
-          position: absolute;
+          left: auto;
           right: -4px;
-          top: 0;
-          bottom: 0;
-          width: 4px;
-          background: #2b506e;
         }
     </style>
 </head>
@@ -264,6 +255,7 @@
         
         <div id="scrolly-2">
           <div id="files-visual">
+            <h2>File Size Evolution</h2>
             <dl id="files">
               <!-- Files visualization will be rendered here -->
             </dl>

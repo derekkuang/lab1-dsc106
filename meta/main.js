@@ -677,43 +677,23 @@ d3.select('#files-story')
   .join('div')
   .attr('class', 'step')
   .html(
-    (d, i) => {
-      // Get file changes for this commit
-      const fileChanges = d3.rollups(
+    (d, i) => `
+		On ${d.datetime.toLocaleString('en', {
+      dateStyle: 'full',
+      timeStyle: 'short',
+    })},
+		I made <a href="${d.url}" target="_blank">${
+      i > 0 ? 'another glorious commit' : 'my first commit, and it was glorious'
+    }</a>.
+		I edited ${d.totalLines} lines across ${
+      d3.rollups(
         d.lines,
-        (lines) => lines.length,
-        (line) => line.file
-      );
-      
-      // Sort files by number of lines changed
-      fileChanges.sort((a, b) => b[1] - a[1]);
-      
-      // Format file changes as a list
-      const filesList = fileChanges.map(([file, lines]) => 
-        `<li><code>${file}</code>: ${lines} lines</li>`
-      ).join('');
-      
-      return `
-        <h3>Commit on ${d.datetime.toLocaleString('en', {
-          dateStyle: 'medium',
-          timeStyle: 'short',
-        })}</h3>
-        <p>
-          In this commit, I ${i === 0 ? 'started the project and' : ''} 
-          modified ${fileChanges.length} ${fileChanges.length === 1 ? 'file' : 'files'} 
-          with a total of ${d.totalLines} lines.
-        </p>
-        ${fileChanges.length > 0 ? `
-        <p>Files changed:</p>
-        <ul class="file-list">
-          ${filesList}
-        </ul>
-        ` : ''}
-        <p class="commit-id">
-          <a href="${d.url}" target="_blank">View commit ${d.id.substring(0, 7)}</a>
-        </p>
-      `;
-    }
+        (D) => D.length,
+        (d) => d.file,
+      ).length
+    } files.
+		Then I looked over all I had made, and I saw that it was very good.
+	`,
   );
 
 // Function for file visualization scrollama
