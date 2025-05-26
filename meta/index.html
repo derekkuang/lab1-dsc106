@@ -37,6 +37,31 @@
           height: 50vh;
         }
         
+        #scrolly-2 {
+          position: relative;
+          display: flex;
+          gap: 1rem;
+          margin: 2rem 0;
+
+          > * {
+            flex: 1;
+          }
+        }
+
+        #files-story {
+          position: relative;
+          padding-left: 1rem;
+        }
+
+        #files-visual {
+          position: sticky;
+          top: 0;
+          left: 0;
+          bottom: auto;
+          height: 60vh;
+          overflow-y: auto;
+        }
+        
         #files {
           display: grid;
           grid-template-columns: 1fr 4fr;
@@ -81,11 +106,33 @@
         }
 
         .step {
-          margin-bottom: 80vh;
-          padding: 1rem;
-          background: rgba(255, 255, 255, 0.8);
-          border-left: 3px solid steelblue;
+          margin-bottom: 5vh;
+          padding: 1rem 1.5rem;
+          background: rgba(255, 255, 255, 0.95);
+          border-left: 4px solid steelblue;
           line-height: 1.5;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          border-radius: 0 4px 4px 0;
+          max-width: 90%;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          position: relative;
+        }
+        
+        .step.is-active {
+          transform: translateX(8px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          border-left-color: #2b506e;
+          background: rgba(255, 255, 255, 1);
+        }
+        
+        .step.is-active:after {
+          content: "";
+          position: absolute;
+          left: -4px;
+          top: 0;
+          bottom: 0;
+          width: 4px;
+          background: #2b506e;
         }
         
         .step a {
@@ -95,6 +142,71 @@
         
         .step a:hover {
           text-decoration: underline;
+        }
+        
+        .file-list {
+          margin: 0.5rem 0;
+          padding-left: 1.5rem;
+        }
+        
+        .file-list li {
+          margin-bottom: 0.25rem;
+        }
+        
+        .file-list code {
+          font-family: monospace;
+          background: rgba(0, 0, 0, 0.05);
+          padding: 0.1rem 0.3rem;
+          border-radius: 3px;
+        }
+        
+        .commit-id {
+          font-size: 0.9rem;
+          margin-top: 1rem;
+          text-align: right;
+        }
+        
+        .commit-id a {
+          color: #555;
+          text-decoration: none;
+          border-bottom: 1px dotted #aaa;
+        }
+        
+        .commit-id a:hover {
+          color: steelblue;
+          border-bottom-color: steelblue;
+        }
+
+        #scrolly-2 .step {
+          margin-bottom: 5vh;
+          padding: 1rem 1.5rem;
+          background: rgba(255, 255, 255, 0.95);
+          border-right: 4px solid steelblue;
+          border-left: none;
+          line-height: 1.5;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          border-radius: 4px 0 0 4px;
+          max-width: 90%;
+          margin-left: auto;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          position: relative;
+        }
+        
+        #scrolly-2 .step.is-active {
+          transform: translateX(-8px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          border-right-color: #2b506e;
+          background: rgba(255, 255, 255, 1);
+        }
+        
+        #scrolly-2 .step.is-active:after {
+          content: "";
+          position: absolute;
+          right: -4px;
+          top: 0;
+          bottom: 0;
+          width: 4px;
+          background: #2b506e;
         }
     </style>
 </head>
@@ -148,16 +260,18 @@
           <dd id="commit-lines"></dd>
         </dl>
         
-        <dl id="files">
-          <!-- we want the following structure for each file:
-          <div>
-            <dt>
-              <code>{file.name}</code>
-            </dt>
-            <dd>{file.lines.length} lines</dd>
+        <h2 style="margin-top: 4rem;">Evolution of Files Over Time</h2>
+        
+        <div id="scrolly-2">
+          <div id="files-visual">
+            <dl id="files">
+              <!-- Files visualization will be rendered here -->
+            </dl>
           </div>
-          -->
-        </dl>
+          <div id="files-story">
+            <p>This visualization shows how the codebase evolved at the file level. As you scroll through the commits, you'll see how individual files grew and changed over time.</p>
+          </div>
+        </div>
     </div>
 
     <script type="module" src="../global.js"></script>
